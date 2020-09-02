@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
 
 namespace Swagger_for_ServiceComposer.ApiDescription
@@ -12,10 +13,12 @@ namespace Swagger_for_ServiceComposer.ApiDescription
     internal class ServiceComposerApiDescriptionProvider : IApiDescriptionProvider
     {
         private readonly EndpointDataSource _endpointDataSource;
+        private readonly IModelMetadataProvider _modelMetadataProvider;
 
-        public ServiceComposerApiDescriptionProvider(EndpointDataSource endpointDataSource)
+        public ServiceComposerApiDescriptionProvider(EndpointDataSource endpointDataSource, IModelMetadataProvider modelMetadataProvider)
         {
             _endpointDataSource = endpointDataSource;
+            _modelMetadataProvider = modelMetadataProvider;
         }
 
         // Executes after ASP.NET Core
@@ -57,13 +60,27 @@ namespace Swagger_for_ServiceComposer.ApiDescription
             apiDescription.RelativePath = routeEndpoint.RoutePattern.RawText.TrimStart('/');
             apiDescription.SupportedRequestFormats.Add(new ApiRequestFormat { MediaType = "application/json" });
 
+            foreach (var producesDefaultResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesDefaultResponseTypeAttribute>())
+            {
+                apiDescription.SupportedResponseTypes.Add(new ApiResponseType
+                {
+                    Type = producesDefaultResponseTypeAttribute.Type,
+                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
+                    StatusCode = producesDefaultResponseTypeAttribute.StatusCode,
+                    IsDefaultResponse = true,
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(producesDefaultResponseTypeAttribute.Type)
+                });
+            }
+
             foreach (var producesResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesResponseTypeAttribute>())
             {
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
                     Type = producesResponseTypeAttribute.Type,
-                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
-                    StatusCode = producesResponseTypeAttribute.StatusCode
+                    ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
+                    StatusCode = producesResponseTypeAttribute.StatusCode,
+                    IsDefaultResponse = false,
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(producesResponseTypeAttribute.Type)
                 });
             }
 

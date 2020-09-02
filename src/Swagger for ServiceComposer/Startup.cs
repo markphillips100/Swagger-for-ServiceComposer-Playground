@@ -20,7 +20,6 @@ namespace Swagger_for_ServiceComposer
             services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, ServiceComposerApiDescriptionProvider>());
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
