@@ -91,7 +91,8 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                     Name = apiParameterDescriptionAttribute.Name,
                     IsRequired = apiParameterDescriptionAttribute.IsRequired,
                     Type = apiParameterDescriptionAttribute.Type,
-                    Source =GetBindingSource(apiParameterDescriptionAttribute.Source)
+                    Source = GetBindingSource(apiParameterDescriptionAttribute.Source),
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiParameterDescriptionAttribute.Type)
                 });
             }
 
