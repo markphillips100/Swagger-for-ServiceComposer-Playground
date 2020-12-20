@@ -6,7 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ServiceComposer.AspNetCore" Version="1.5.0" />
+      <PackageReference Include="ServiceComposer.AspNetCore" Version="1.7.2-pr.155.build-id.36928654.alpha.0.9" />
+      <PackageReference Include="ServiceComposer.AspNetCore.TypedViewModel" Version="0.0.0-pr.2.build-id.36929478.alpha.0.6" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
     </ItemGroup>
 
