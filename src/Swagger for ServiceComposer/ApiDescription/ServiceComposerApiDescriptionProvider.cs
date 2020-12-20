@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
+using ServiceComposer.AspNetCore.TypedViewModel;
 
 namespace Swagger_for_ServiceComposer.ApiDescription
 {
@@ -93,6 +94,18 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                     Type = apiParameterDescriptionAttribute.Type,
                     Source = GetBindingSource(apiParameterDescriptionAttribute.Source),
                     ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiParameterDescriptionAttribute.Type)
+                });
+            }
+            
+            foreach (var typedViewModelAttribute in routeEndpoint.Metadata.OfType<TypedViewModelAttribute>())
+            {
+                apiDescription.SupportedResponseTypes.Add(new ApiResponseType
+                {
+                    Type = typedViewModelAttribute.Type,
+                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
+                    StatusCode = 200,
+                    IsDefaultResponse = false,
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(typedViewModelAttribute.Type)
                 });
             }
 
