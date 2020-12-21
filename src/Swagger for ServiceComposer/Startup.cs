@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ServiceComposer.AspNetCore;
 using Swagger_for_ServiceComposer.ApiDescription;
+using Swagger_for_ServiceComposer.Models;
 
 namespace Swagger_for_ServiceComposer
 {
@@ -14,6 +15,7 @@ namespace Swagger_for_ServiceComposer
         {
             services.AddRouting();
             services.AddViewModelComposition();
+            services.AddSingleton<IViewModelFactory, ViewModelFactory>();
 
             services.AddSwaggerGen();
             services.AddControllers(); // Swagger needs this for the ApiExplorer.

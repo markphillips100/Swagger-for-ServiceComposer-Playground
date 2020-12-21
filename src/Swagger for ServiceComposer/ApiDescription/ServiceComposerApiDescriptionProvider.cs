@@ -1,25 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
-using ServiceComposer.AspNetCore.TypedViewModel;
 
 namespace Swagger_for_ServiceComposer.ApiDescription
 {
     internal class ServiceComposerApiDescriptionProvider : IApiDescriptionProvider
     {
-        private static readonly ProxyGenerator ProxyGenerator = new ProxyGenerator();
+        // private static readonly ProxyGenerator ProxyGenerator = new ProxyGenerator();
         private readonly EndpointDataSource _endpointDataSource;
         private readonly IModelMetadataProvider _modelMetadataProvider;
-        
+
         public ServiceComposerApiDescriptionProvider(EndpointDataSource endpointDataSource, IModelMetadataProvider modelMetadataProvider)
         {
             _endpointDataSource = endpointDataSource;
@@ -105,36 +100,36 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                 });
             }
 
-            var typedViewModelAttributes = routeEndpoint.Metadata
-                .OfType<TypedViewModelAttribute>()
-                .ToList();
-            if (typedViewModelAttributes.Any())
-            {
-                var types = typedViewModelAttributes.Select(a => a.Type).Distinct();
-
-                var ctor = typeof(DisplayNameAttribute).GetConstructor(new[] { typeof(string) });
-                var options = new ProxyGenerationOptions()
-                {
-                    AdditionalAttributes =
-                    {
-                        new CustomAttributeInfo(ctor, new object[]{"composed view model"})
-                    }
-                };
-                var vm = ProxyGenerator.CreateClassProxy(
-                    typeof(ComposedViewModel), 
-                    types.ToArray(),
-                    options);
-                var vmType = vm.GetType();
-
-                apiDescription.SupportedResponseTypes.Add(new ApiResponseType
-                {
-                    Type = vmType,
-                    ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
-                    StatusCode = 200,
-                    IsDefaultResponse = true,
-                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(vmType)
-                });
-            }
+            // var typedViewModelAttributes = routeEndpoint.Metadata
+            //     .OfType<TypedViewModelAttribute>()
+            //     .ToList();
+            // if (typedViewModelAttributes.Any())
+            // {
+            //     var types = typedViewModelAttributes.Select(a => a.Type).Distinct();
+            //
+            //     var ctor = typeof(DisplayNameAttribute).GetConstructor(new[] { typeof(string) });
+            //     var options = new ProxyGenerationOptions()
+            //     {
+            //         AdditionalAttributes =
+            //         {
+            //             new CustomAttributeInfo(ctor, new object[]{"composed view model"})
+            //         }
+            //     };
+            //     var vm = ProxyGenerator.CreateClassProxy(
+            //         typeof(ComposedViewModel),
+            //         types.ToArray(),
+            //         options);
+            //     var vmType = vm.GetType();
+            //
+            //     apiDescription.SupportedResponseTypes.Add(new ApiResponseType
+            //     {
+            //         Type = vmType,
+            //         ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
+            //         StatusCode = 200,
+            //         IsDefaultResponse = true,
+            //         ModelMetadata = _modelMetadataProvider.GetMetadataForType(vmType)
+            //     });
+            // }
 
             return apiDescription;
         }
@@ -155,6 +150,6 @@ namespace Swagger_for_ServiceComposer.ApiDescription
 
     public abstract class ComposedViewModel
     {
-        
+
     }
 }
