@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -13,9 +16,10 @@ namespace Swagger_for_ServiceComposer.ApiDescription
 {
     internal class ServiceComposerApiDescriptionProvider : IApiDescriptionProvider
     {
+        private static readonly ProxyGenerator ProxyGenerator = new ProxyGenerator();
         private readonly EndpointDataSource _endpointDataSource;
         private readonly IModelMetadataProvider _modelMetadataProvider;
-
+        
         public ServiceComposerApiDescriptionProvider(EndpointDataSource endpointDataSource, IModelMetadataProvider modelMetadataProvider)
         {
             _endpointDataSource = endpointDataSource;
@@ -46,7 +50,7 @@ namespace Swagger_for_ServiceComposer.ApiDescription
             var verb = httpMethodMetadata?.HttpMethods.FirstOrDefault();
 
             var apiDescription = new Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription();
-             // Default to a GET in case a Route map was registered inline - it's unlikely to be a composition handler in that case.
+            // Default to a GET in case a Route map was registered inline - it's unlikely to be a composition handler in that case.
             apiDescription.HttpMethod = verb ?? "GET";
             apiDescription.ActionDescriptor = new ActionDescriptor
             {
@@ -55,25 +59,28 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                     // Swagger uses this to group endpoints together.
                     // Group methods together using the service name.
                     // NOTE: Need a metadata model in service composer to begin supplying more info other than just http verbs and route patterns.
-                    ["controller"] = "ViewModelComposition"// routeEndpoint.RoutePattern.GetParameter("controller").Default.ToString()
+                    ["controller"] =
+                        "ViewModelComposition" // routeEndpoint.RoutePattern.GetParameter("controller").Default.ToString()
                 }
             };
             apiDescription.RelativePath = routeEndpoint.RoutePattern.RawText.TrimStart('/');
-            apiDescription.SupportedRequestFormats.Add(new ApiRequestFormat { MediaType = "application/json" });
+            apiDescription.SupportedRequestFormats.Add(new ApiRequestFormat {MediaType = "application/json"});
 
-            foreach (var producesDefaultResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesDefaultResponseTypeAttribute>())
+            foreach (var producesDefaultResponseTypeAttribute in routeEndpoint.Metadata
+                .OfType<ProducesDefaultResponseTypeAttribute>())
             {
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
                     Type = producesDefaultResponseTypeAttribute.Type,
-                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
+                    ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
                     StatusCode = producesDefaultResponseTypeAttribute.StatusCode,
                     IsDefaultResponse = true,
                     ModelMetadata = _modelMetadataProvider.GetMetadataForType(producesDefaultResponseTypeAttribute.Type)
                 });
             }
 
-            foreach (var producesResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesResponseTypeAttribute>())
+            foreach (var producesResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesResponseTypeAttribute>()
+            )
             {
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
@@ -85,7 +92,8 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                 });
             }
 
-            foreach (var apiParameterDescriptionAttribute in routeEndpoint.Metadata.OfType<ApiParameterDescriptionAttribute>())
+            foreach (var apiParameterDescriptionAttribute in routeEndpoint.Metadata
+                .OfType<ApiParameterDescriptionAttribute>())
             {
                 apiDescription.ParameterDescriptions.Add(new ApiParameterDescription()
                 {
@@ -96,16 +104,35 @@ namespace Swagger_for_ServiceComposer.ApiDescription
                     ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiParameterDescriptionAttribute.Type)
                 });
             }
-            
-            foreach (var typedViewModelAttribute in routeEndpoint.Metadata.OfType<TypedViewModelAttribute>())
+
+            var typedViewModelAttributes = routeEndpoint.Metadata
+                .OfType<TypedViewModelAttribute>()
+                .ToList();
+            if (typedViewModelAttributes.Any())
             {
+                var types = typedViewModelAttributes.Select(a => a.Type).Distinct();
+
+                var ctor = typeof(DisplayNameAttribute).GetConstructor(new[] { typeof(string) });
+                var options = new ProxyGenerationOptions()
+                {
+                    AdditionalAttributes =
+                    {
+                        new CustomAttributeInfo(ctor, new object[]{"composed view model"})
+                    }
+                };
+                var vm = ProxyGenerator.CreateClassProxy(
+                    typeof(ComposedViewModel), 
+                    types.ToArray(),
+                    options);
+                var vmType = vm.GetType();
+
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
-                    Type = typedViewModelAttribute.Type,
-                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
+                    Type = vmType,
+                    ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
                     StatusCode = 200,
-                    IsDefaultResponse = false,
-                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(typedViewModelAttribute.Type)
+                    IsDefaultResponse = true,
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(vmType)
                 });
             }
 
@@ -114,7 +141,7 @@ namespace Swagger_for_ServiceComposer.ApiDescription
 
         BindingSource GetBindingSource(string source)
         {
-            var staticProps = typeof(BindingSource).GetFields(BindingFlags.Static|BindingFlags.Public);
+            var staticProps = typeof(BindingSource).GetFields(BindingFlags.Static | BindingFlags.Public);
             var prop = staticProps.Single(p => p.Name == source);
 
             return prop.GetValue(null) as BindingSource;
@@ -124,5 +151,10 @@ namespace Swagger_for_ServiceComposer.ApiDescription
         {
             // no-op
         }
+    }
+
+    public abstract class ComposedViewModel
+    {
+        
     }
 }
