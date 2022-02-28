@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AC9D0A4C-4BB8-46BE-878F-6C2D93984644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{627F116A-87E1-44B0-BE92-85ECF16537F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swagger for ServiceComposer", "src\Swagger for ServiceComposer\Swagger for ServiceComposer.csproj", "{74BC1C02-CEDE-453B-9481-E1C668055CC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposerSourceGenerators", "src\ServiceComposerSourceGenerators\ServiceComposerSourceGenerators.csproj", "{B3578E7D-A99F-42F5-AED2-3085E1592DFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceComposerSourceGenerators.UnitTests", "tests\ServiceComposerSourceGenerators.UnitTests\ServiceComposerSourceGenerators.UnitTests.csproj", "{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceComposerAttributes", "src\ServiceComposerAttributes\ServiceComposerAttributes.csproj", "{BFB7BC55-8623-46B3-919D-D26E389DB356}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74BC1C02-CEDE-453B-9481-E1C668055CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74BC1C02-CEDE-453B-9481-E1C668055CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74BC1C02-CEDE-453B-9481-E1C668055CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74BC1C02-CEDE-453B-9481-E1C668055CC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3578E7D-A99F-42F5-AED2-3085E1592DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3578E7D-A99F-42F5-AED2-3085E1592DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3578E7D-A99F-42F5-AED2-3085E1592DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3578E7D-A99F-42F5-AED2-3085E1592DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{74BC1C02-CEDE-453B-9481-E1C668055CC3} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
+		{B3578E7D-A99F-42F5-AED2-3085E1592DFC} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
+		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17} = {627F116A-87E1-44B0-BE92-85ECF16537F1}
+		{BFB7BC55-8623-46B3-919D-D26E389DB356} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {340CC565-F59C-40D0-989E-C9BCA49102C4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,22 @@
+﻿
+namespace 
+{
+    public class Swagger_for_ServiceComposerHandlersServiceASampleHandlerDocumentationCompositionModel
+    {
+        public int AValue { get; set; }
+
+        public Swagger_for_ServiceComposer.Handlers.ServiceB.MyModel AnotherValue { get; set; }
+
+        }
+
+    public class Swagger_for_ServiceComposerHandlersServiceASampleHandlerDocumentationHandler : ICompositionRequestsHandler
+    {
+        [HttpGet("/sample/{id}")]
+        [ProducesResponseType(typeof(Swagger_for_ServiceComposerHandlersServiceASampleHandlerDocumentationCompositionModel), StatusCodes.Status200OK)]
+        public Task Handle(HttpRequest request)
+        {
+            return Task.CompletedTask;
+        }
+    }
+
+}
