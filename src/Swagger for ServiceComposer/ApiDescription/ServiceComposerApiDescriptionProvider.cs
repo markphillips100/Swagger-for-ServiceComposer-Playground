@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
+using ServiceComposerAttributes;
 
 namespace Swagger_for_ServiceComposer.ApiDescription
 {
