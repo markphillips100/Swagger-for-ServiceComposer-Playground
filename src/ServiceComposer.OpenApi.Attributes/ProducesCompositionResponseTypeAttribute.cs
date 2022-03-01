@@ -1,12 +1,17 @@
 using System;
 
-#nullable enable
-
-namespace ServiceComposerAttributes;
+namespace ServiceComposer.OpenApi.Attributes;
 
 /// <summary>
-/// A filter that specifies the type of the value and status code returned by the action.
+/// A filter that specifies the type and property name of the composition value returned by this handler.
 /// </summary>
+/// <remarks>
+/// The composition properties identified here are used to combine into a single model returned by the
+/// HttpGet handler.  The model is only used for documentation purposes.
+/// </remarks>
+/// <remarks>
+/// The s
+/// </remarks>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
 public class ProducesCompositionResponseTypeAttribute : Attribute
 {
@@ -18,7 +23,6 @@ public class ProducesCompositionResponseTypeAttribute : Attribute
     /// </summary>
     /// <param name="compositionPropertyName">The name of the property to give to the merged viewmodel.</param>
     /// <param name="type">The <see cref="Type"/> of object that is going to be written in the response.</param>
-    /// <param name="statusCode">The HTTP response status code.</param>
     public ProducesCompositionResponseTypeAttribute(string compositionPropertyName, Type type)
     {
         _compositionPropertyName = compositionPropertyName;

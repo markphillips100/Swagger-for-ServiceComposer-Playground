@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using ServiceComposer.AspNetCore;
-using Swagger_for_ServiceComposer.ApiDescription;
+using ServiceComposer.OpenApi.Configuration;
 
 namespace Swagger_for_ServiceComposer
 {
@@ -17,7 +15,7 @@ namespace Swagger_for_ServiceComposer
 
             services.AddSwaggerGen();
             services.AddControllers(); // Swagger needs this for the ApiExplorer.
-            services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, ServiceComposerApiDescriptionProvider>());
+            services.AddServiceComposerOpenApiServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

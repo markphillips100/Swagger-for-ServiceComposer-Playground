@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\ServiceComposerSourceGenerators\ServiceComposerSourceGenerators.csproj" />
+      <ProjectReference Include="..\..\src\ServiceComposer.SourceGenerators\ServiceComposer.SourceGenerators.csproj" />
     </ItemGroup>
 
 </Project>

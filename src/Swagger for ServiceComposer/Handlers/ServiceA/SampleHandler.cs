@@ -4,17 +4,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using ServiceComposer.AspNetCore;
-using ServiceComposerAttributes;
-using Swagger_for_ServiceComposer.ApiDescription;
+using ServiceComposer.OpenApi.Attributes;
 
 namespace Swagger_for_ServiceComposer.Handlers.ServiceA
 {
     public class SampleHandler : ICompositionRequestsHandler
     {
         [HttpGet("/sample/{id}")]
-        [ProducesDefaultResponseType(typeof(void))]
         [ProducesCompositionResponseType("AValue", typeof(int))]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ApiParameterDescription(Name = "id", IsRequired = true, Type = typeof(int), Source = "Path")]
         public Task Handle(HttpRequest request)
         {

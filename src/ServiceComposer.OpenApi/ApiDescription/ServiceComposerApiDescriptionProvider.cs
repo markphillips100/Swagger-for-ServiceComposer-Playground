@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
-using ServiceComposerAttributes;
+using ServiceComposer.OpenApi.Attributes;
 
-namespace Swagger_for_ServiceComposer.ApiDescription
+namespace ServiceComposer.OpenApi.ApiDescription
 {
     internal class ServiceComposerApiDescriptionProvider : IApiDescriptionProvider
     {
@@ -46,7 +45,7 @@ namespace Swagger_for_ServiceComposer.ApiDescription
             var verb = httpMethodMetadata?.HttpMethods.FirstOrDefault();
 
             var apiDescription = new Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription();
-             // Default to a GET in case a Route map was registered inline - it's unlikely to be a composition handler in that case.
+            // Default to a GET in case a Route map was registered inline - it's unlikely to be a composition handler in that case.
             apiDescription.HttpMethod = verb ?? "GET";
             apiDescription.ActionDescriptor = new ActionDescriptor
             {
@@ -61,24 +60,31 @@ namespace Swagger_for_ServiceComposer.ApiDescription
             apiDescription.RelativePath = routeEndpoint.RoutePattern.RawText.TrimStart('/');
             apiDescription.SupportedRequestFormats.Add(new ApiRequestFormat { MediaType = "application/json" });
 
-            foreach (var producesDefaultResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesDefaultResponseTypeAttribute>())
+            var firstProducesDefaultResponseTypeAttribute =
+                routeEndpoint.Metadata.OfType<ProducesDefaultResponseTypeAttribute>().FirstOrDefault();
+            if (firstProducesDefaultResponseTypeAttribute != null)
             {
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
-                    Type = producesDefaultResponseTypeAttribute.Type,
+                    Type = firstProducesDefaultResponseTypeAttribute.Type,
                     ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
-                    StatusCode = producesDefaultResponseTypeAttribute.StatusCode,
+                    StatusCode = firstProducesDefaultResponseTypeAttribute.StatusCode,
                     IsDefaultResponse = true,
-                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(producesDefaultResponseTypeAttribute.Type)
+                    ModelMetadata = _modelMetadataProvider.GetMetadataForType(firstProducesDefaultResponseTypeAttribute.Type)
                 });
             }
 
-            foreach (var producesResponseTypeAttribute in routeEndpoint.Metadata.OfType<ProducesResponseTypeAttribute>())
+            var statusCodeProducesResponseTypeAttributes = routeEndpoint.Metadata
+                .OfType<ProducesResponseTypeAttribute>()
+                .GroupBy(g => g.StatusCode)
+                .Select(group => group.First());
+
+            foreach (var producesResponseTypeAttribute in statusCodeProducesResponseTypeAttributes)
             {
                 apiDescription.SupportedResponseTypes.Add(new ApiResponseType
                 {
                     Type = producesResponseTypeAttribute.Type,
-                    ApiResponseFormats = {new ApiResponseFormat {MediaType = "application/json"}},
+                    ApiResponseFormats = { new ApiResponseFormat { MediaType = "application/json" } },
                     StatusCode = producesResponseTypeAttribute.StatusCode,
                     IsDefaultResponse = false,
                     ModelMetadata = _modelMetadataProvider.GetMetadataForType(producesResponseTypeAttribute.Type)
@@ -102,7 +108,7 @@ namespace Swagger_for_ServiceComposer.ApiDescription
 
         BindingSource GetBindingSource(string source)
         {
-            var staticProps = typeof(BindingSource).GetFields(BindingFlags.Static|BindingFlags.Public);
+            var staticProps = typeof(BindingSource).GetFields(BindingFlags.Static | BindingFlags.Public);
             var prop = staticProps.Single(p => p.Name == source);
 
             return prop.GetValue(null) as BindingSource;

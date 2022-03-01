@@ -9,11 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{627F116A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swagger for ServiceComposer", "src\Swagger for ServiceComposer\Swagger for ServiceComposer.csproj", "{74BC1C02-CEDE-453B-9481-E1C668055CC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposerSourceGenerators", "src\ServiceComposerSourceGenerators\ServiceComposerSourceGenerators.csproj", "{B3578E7D-A99F-42F5-AED2-3085E1592DFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposer.SourceGenerators", "src\ServiceComposer.SourceGenerators\ServiceComposer.SourceGenerators.csproj", "{B3578E7D-A99F-42F5-AED2-3085E1592DFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceComposerSourceGenerators.UnitTests", "tests\ServiceComposerSourceGenerators.UnitTests\ServiceComposerSourceGenerators.UnitTests.csproj", "{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposer.SourceGenerators.UnitTests", "tests\ServiceComposer.SourceGenerators.UnitTests\ServiceComposer.SourceGenerators.UnitTests.csproj", "{1AEA12CC-5715-45ED-B7C5-9649DA60BA17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceComposerAttributes", "src\ServiceComposerAttributes\ServiceComposerAttributes.csproj", "{BFB7BC55-8623-46B3-919D-D26E389DB356}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposer.OpenApi", "src\ServiceComposer.OpenApi\ServiceComposer.OpenApi.csproj", "{BFB7BC55-8623-46B3-919D-D26E389DB356}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceComposer.OpenApi.Attributes", "src\ServiceComposer.OpenApi.Attributes\ServiceComposer.OpenApi.Attributes.csproj", "{08EE5049-C75E-4947-B5E1-0D16D0CBBB01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFB7BC55-8623-46B3-919D-D26E389DB356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08EE5049-C75E-4947-B5E1-0D16D0CBBB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08EE5049-C75E-4947-B5E1-0D16D0CBBB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08EE5049-C75E-4947-B5E1-0D16D0CBBB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08EE5049-C75E-4947-B5E1-0D16D0CBBB01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{B3578E7D-A99F-42F5-AED2-3085E1592DFC} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
 		{1AEA12CC-5715-45ED-B7C5-9649DA60BA17} = {627F116A-87E1-44B0-BE92-85ECF16537F1}
 		{BFB7BC55-8623-46B3-919D-D26E389DB356} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
+		{08EE5049-C75E-4947-B5E1-0D16D0CBBB01} = {AC9D0A4C-4BB8-46BE-878F-6C2D93984644}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {340CC565-F59C-40D0-989E-C9BCA49102C4}

@@ -1,0 +1,28 @@
+﻿
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using ServiceComposer.AspNetCore;
+
+namespace Swagger_for_ServiceComposerHandlersServiceASampleHandler
+{
+    public class CompositionModel
+    {
+        public int AValue { get; set; }
+
+        public Swagger_for_ServiceComposer.Handlers.ServiceB.MyModel AnotherValue { get; set; }
+
+    }
+
+    public class DocumentationHandler : ICompositionRequestsHandler
+    {
+        [HttpGet("/sample/{id}")]
+        [ProducesResponseType(typeof(CompositionModel), StatusCodes.Status200OK)]
+        public Task Handle(HttpRequest request)
+        {
+            return Task.CompletedTask;
+        }
+    }
+}

@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Swagger_for_ServiceComposer</RootNamespace>
+        <!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>-->
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ServiceComposerAttributes\ServiceComposerAttributes.csproj" />
-        <ProjectReference Include="..\ServiceComposerSourceGenerators\ServiceComposerSourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\ServiceComposer.OpenApi\ServiceComposer.OpenApi.csproj" />
+        <ProjectReference Include="..\ServiceComposer.SourceGenerators\ServiceComposer.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 </Project>

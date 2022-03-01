@@ -3,9 +3,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using ServiceComposerAttributes;
 
-namespace ServiceComposerSourceGenerators.UnitTests;
+namespace ServiceComposer.SourceGenerators.UnitTests;
 
 internal class TestHelpers
 {
@@ -19,7 +18,6 @@ internal class TestHelpers
             .Concat(new[]
             {
                 MetadataReference.CreateFromFile(typeof(T).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ProducesCompositionResponseTypeAttribute).Assembly.Location)
             });
 
         var compilation = CSharpCompilation.Create(

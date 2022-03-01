@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
 
-namespace ServiceComposerSourceGenerators.UnitTests;
+namespace ServiceComposer.SourceGenerators.UnitTests;
 
 [UsesVerify]
-public class SwaggerGeneratorTests
+public class OpenApiCompositionModelSourceGeneratorTests
 {
     [Fact]
-    public Task CanGenerateNamespacedClassNames()
+    public Task ShouldGenerateCompositionModel_WhenProducesCompositionResponseTypeAppliedToHandler()
     {
         var inputBuilder = new StringBuilder();
         inputBuilder.Append(CompositionHandlerInterface);
@@ -19,7 +19,7 @@ public class SwaggerGeneratorTests
         inputBuilder.Append(ServiceBSampleHandlerClass);
         var input = inputBuilder.ToString();
 
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<ServiceComposerSwaggerSourceGenerator>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<OpenApiCompositionModelSourceGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verifier.Verify(output).UseDirectory("Snapshots");

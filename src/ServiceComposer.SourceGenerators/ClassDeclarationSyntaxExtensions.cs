@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ServiceComposerSourceGenerators;
+namespace ServiceComposer.SourceGenerators;
 
 public static class ClassDeclarationSyntaxExtensions
 {
@@ -12,7 +12,7 @@ public static class ClassDeclarationSyntaxExtensions
     private const char NamespaceClassDelimiter = '.';
     private const char TypeParameterClassDelimiter = '`';
 
-    public static string GetFullName(this ClassDeclarationSyntax source)
+    public static string GetFullName(this ClassDeclarationSyntax source, bool appendClassName = true)
     {
         if (source is null)
             throw new ArgumentNullException(nameof(source));
@@ -43,7 +43,11 @@ public static class ClassDeclarationSyntaxExtensions
             AppendName(result, type);
             result.Append(NamespaceClassDelimiter);
         }
-        AppendName(result, source);
+
+        if (appendClassName)
+        {
+            AppendName(result, source);
+        }
 
         return result.ToString();
 
